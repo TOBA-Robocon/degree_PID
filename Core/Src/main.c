@@ -85,17 +85,6 @@ double goal_pulse = 0;		//目標角度をエンコーダのパルス数に変換
 int sec_count_flag = 0;		//1msec毎に立つ
 double cycle = 0.001;		//周期
 
-int constrain(int num, int max, int mini){
-	if(num > max){
-		return max;
-	}
-	else if(num < mini){
-		return mini;
-	}
-
-	return num;
-}//数値の制限
-
 /* USER CODE END 0 */
 
 /**
@@ -479,6 +468,17 @@ int _write(int file, char *ptr, int len)
   HAL_UART_Transmit(&huart1,(uint8_t *)ptr,len,10);
   return len;
 }//PrintfをUART出力として使う
+
+int constrain(int num, int max, int mini){
+	if(num > max){
+		return max;
+	}
+	else if(num < mini){
+		return mini;
+	}
+
+	return num;
+}//数値の制限
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
