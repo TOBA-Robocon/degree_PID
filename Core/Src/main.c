@@ -71,15 +71,15 @@ int motor_pwm = 0;			//モーターのpwm
 
 //PID用各種変数
 float kP = 10;
-float kI = 0.002;
-float kD = 0.2;
+float kI = 0.0015;
+float kD = 0.025;
 
 int error_now = 0;			//現在の偏差
 int error_old = 0;			//1cycle前の偏差
 double error_dt = 0;	  	//1cycleで変化した偏差の傾き
 double error_integral = 0;	//偏差の数値積分値
 
-double goal_degree = 180;	//目標角度
+double goal_degree = -90;	//目標角度
 double goal_pulse = 0;		//目標角度をエンコーダのパルス数に変換
 
 int sec_count_flag = 0;		//1msec毎に立つ
@@ -128,7 +128,7 @@ int main(void)
 
   TIM2 -> CNT = 5000;	//CNTレジスタを5000(ある程度大きい値)にセット
 
-  goal_pulse = 1.666 * 4 * goal_degree;	//目標角度を目標パルス数に変換
+  goal_pulse = 1.66667 * 4 * goal_degree;	//目標角度を目標パルス数に変換
 
   /*STM32でエンコーダーモードを使うとエンコーダの1パルスが4パルスごとにカウントされてしまうので
    * 一周を2400パルスの360度として変換している
@@ -150,7 +150,7 @@ int main(void)
 		  error_now = (goal_pulse - encoder_count)/4;//パルスからエラーを計算
 
 		  error_dt = (error_now - error_old)/cycle;//数値微分
-		  error_integral = error_integral + ((error_now + error_old) * cycle) / 2;//台形積分
+		  error_integral = error_integral + (error_now + error_old) / 2;//台形積分
 
 		  motor_PID = kP * error_now + kI * error_integral + kD * error_dt;//PIDを計算
 
@@ -165,26 +165,26 @@ int main(void)
 			  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, motor_pwm);
 		  }//モーター逆転
 
-		  printf(" PID:%d", motor_pwm);
-
-		  printf(" P:%lf", kP * error_now);
-
-		  printf(" I:%lf", kI * error_integral);
-
-		  printf(" D:%lf", kD * error_dt);
+//		  printf(" PID:%d", motor_pwm);
+//
+//		  printf(" P:%lf", kP * error_now);
+//
+//		  printf(" I:%lf", kI * error_integral);
+//
+//		  printf(" D:%lf", kD * error_dt);
 
 //		  printf(" pulse_count:%d", encoder_count);
 //
 //		  printf(" encorder_now:%d", TIM2 -> CNT);
 
-		  printf(" error:%d \r\n", error_now);
+//		  printf(" error:%d \r\n", error_now);
 
 		  error_old = error_now;
 		  sec_count_flag = 0;
 		  //各変数に代入
 	  }
 
-	  /*上記のif文はTIM1が割り込みを起こすたびに実行される
+	  /*上記のif文はTIM1が割り込むたびに実行される
 	   * 割り込みの周期はTIM1のCounterPeriodとPrescalerを変更する
 	   * 参考 : https://sbasami-tech.hatenablog.com/entry/2021/04/20/203322
 	   */
