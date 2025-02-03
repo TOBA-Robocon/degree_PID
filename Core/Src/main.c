@@ -165,19 +165,19 @@ int main(void)
 			  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, motor_pwm);
 		  }//モーター逆転
 
-//		  printf(" PID:%d", motor_pwm);
-//
-//		  printf(" P:%lf", kP * error_now);
-//
-//		  printf(" I:%lf", kI * error_integral);
-//
-//		  printf(" D:%lf", kD * error_dt);
+		  printf(" PID:%d", motor_pwm);
 
-//		  printf(" pulse_count:%d", encoder_count);
-//
-//		  printf(" encorder_now:%d", TIM2 -> CNT);
+		  printf(" P:%lf", kP * error_now);
 
-//		  printf(" error:%d \r\n", error_now);
+		  printf(" I:%lf", kI * error_integral);
+
+		  printf(" D:%lf", kD * error_dt);
+
+		  printf(" pulse_count:%d", encoder_count);
+
+		  printf(" encorder_now:%d", TIM2 -> CNT);
+
+		  printf(" error:%d \r\n", error_now);
 
 		  error_old = error_now;
 		  sec_count_flag = 0;
